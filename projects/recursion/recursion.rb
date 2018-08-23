@@ -164,22 +164,49 @@ def greedy_make_change(num, coins = [25, 10, 5, 1]) # 39 => [25, 10, 1, 1, 1, 1]
   results += greedy_make_change(left_over, coins[1..-1])
 end
 
-p greedy_make_change(56)
-p greedy_make_change(24, [10, 7, 1])
+# p greedy_make_change(56)
+# p greedy_make_change(24, [10, 7, 1])
 
-def make_better_change(num, coins = [25, 10, 5, 1])
+def make_change(amt, coins = [25, 10, 5, 1])
+  return 0 if amt == 0
+  return nil if coins.empty?
 
-  if coins.length == 1
-    return Array.new(num, coins[0])
+  coins = coins.sort.reverse
+
+  best_change = nil
+
+  coins.each_with_index do |coin, i|
+    next if coin > amt
+    remainder = amt - coin
+
+    best_remainder = make_change(remainder, coins.drop(i))
+    next if best_remainder.nil?
+    this_change = [coin] + best_remainder
+
+    if best_change.nil? || best_remainder.nil?
+    end 
   end
-  coin = coins[0]
-  results = []
-
-  left_over = num % coin
-  num_coins = num / coin
-
-  num_coins.times do
-    results << coin
-  end
-  results += greedy_make_change(left_over, coins[1..-1])
 end
+
+
+
+# def get_change(amt, coins=[25, 10, 5, 1])
+#   #p "#{amt}, coins=#{coins}"
+#   return Array.new(amt, coins[0]) if coins.length == 1
+#   coin = coins[0]
+#   max_num_coins = amt / coin
+#
+#   result = []
+#   (1..max_num_coins).to_a.each do |n|
+#     remainder = amt - (coin * n)
+#     last = get_change(remainder, coins[1..-1])
+#     change = Array.new(n, coin)
+#     result << ([[change]+ last])
+#   end
+#   result
+# end
+
+
+
+a = get_change(24, [10, 7, 1])
+p a
